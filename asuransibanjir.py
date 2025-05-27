@@ -49,11 +49,11 @@ if csv_file:
     # Display "as of" date based on the last day of the month of the latest INCEPTION DATE
     if 'INCEPTION DATE' in df.columns:
         if not pd.api.types.is_datetime64_any_dtype(df['INCEPTION DATE']):
-            df['INCEPTION DATE'] = pd.to_datetime(df['INCEPTION DATE'], format='mixed', dayfirst=True, errors='coerce').dt.date
+            df['INCEPTION DATE'] = pd.to_datetime(df['INCEPTION DATE'], format='mixed', dayfirst=True, errors='coerce')
         # Get the latest date from INCEPTION DATE
         latest_date = df['INCEPTION DATE'].max()
         if pd.notna(latest_date):
-            last_day_of_month = pd.Timestamp(latest_date) + MonthEnd(0)
+            last_day_of_month = (latest_date + MonthEnd(0)).date()
             as_of_date = last_day_of_month.strftime('%d %B %Y')
             st.info(f"ℹ️ Data yang diupload adalah data as of **{as_of_date}**")
         else:
@@ -68,7 +68,7 @@ if csv_file:
             if pd.isna(date_str):
                 return date_str  # Biarkan NaN tetap
             try:
-                # C Hed format DD/MM/YYYY
+                # Coba format DD/MM/YYYY
                 return pd.to_datetime(date_str, format='%d/%m/%Y', errors='raise')
             except ValueError:
                 try:
@@ -110,7 +110,6 @@ if csv_file:
 
     # Tampilkan dataframe setelah proses
     st.dataframe(df, use_container_width=True, hide_index=True)
-
     # Step 3: Upload shapefiles
     st.subheader("🗂 Upload Shapefile")
     shp_zips = st.file_uploader(
@@ -214,9 +213,7 @@ if csv_file:
             st.subheader("🧮 Persentase Estimasi Kerugian")
             st.markdown("""
                 <div style='text-align: justify'>
-                Kategori Okupasi terdiri atas Residensial, Industrial dan Komersial.<br>
-                Kategori Risiko akan memuat jumlah lantai dari bangunan dan letak isi yang ada di dalamnya.<br>
-                Untuk mengetahui acuan yang digunakan, dapat dilihat melalui tabel berikut.
+                Kategori Okupasi terdiri atas Residensial, Industrial dan Komersial. Selain itu, Kategori Risiko akan memuat jumlah lantai dari bangunan dan letak isi yang ada di dalamnya. Untuk mengetahui acuan yang digunakan, dapat dilihat melalui tabel berikut.
                 </div>
             """, unsafe_allow_html=True)
 
@@ -343,7 +340,7 @@ if csv_file:
 
             output_excel = io.BytesIO()
             with pd.ExcelWriter(output_excel, engine='xlsxwriter') as writer:
-                final.to_excel(writer, index=False, sheet_name='Data')
+                df.to_excel(writer, index=False, sheet_name='Data')
 
             # Kembalikan posisi ke awal agar bisa dibaca
             output_excel.seek(0)
@@ -358,18 +355,22 @@ if csv_file:
 
             st.write("###### Untuk analisis lebih lanjut, maka dapat memanfaatkan Google Earth Pro. Untuk langkah-langkahnya dapat dilakukan sebagai berikut.")
             st.markdown("""
-                1. Silakan unduh hasil komputasi dalam format **.csv** di atas.<br>
-                2. Install **Google Earth Pro** pada device masing-masing.<br>
-                3. Siapkan file **.kml** atau **.kmz** untuk risiko yang diinginkan. Jika ingin menggunakan layer banjir, Anda dapat mengakses melalui tautan berikut:<br>
-                <a href="https://bit.ly/LayerBanjir" target="_blank" style="text-decoration: none;">👉 Layer Banjir</a><br>
-                Jika ingin semua layer, maka dapat mengakses tautan berikut:<br>
-                <a href="https://gis.bnpb.go.id/server/rest/services/inarisk" target="_blank" style="text-decoration: none;">👉 All Layer inaRISK</a><br>
-                4. Buka file **.kml** atau **.kmz** secara langsung di Google Earth Pro, maka layer akan otomatis muncul di peta.<br>
-                5. Buka file **.csv** hasil dari komputasi, lalu pilih delimiter yang sesuai (jika CSV biasa, pilih **comma** atau **koma (,)**).<br>
-                6. Masukkan kolom **Longitude** dan **Latitude** sesuai dengan nama kolom pada data masing-masing.<br>
-                7. Spesifikasikan tipe data pada setiap kolomnya. Biasanya Google akan otomatis mendeteksi, namun Anda tetap dapat mengeditnya jika ada kesalahan.<br>
+                1. Silakan unduh hasil komputasi dalam format **.csv** di atas.  
+                2. Install **Google Earth Pro** pada device masing-masing.  
+                3. Siapkan file **.kml** atau **.kmz** untuk risiko yang diinginkan. Jika ingin menggunakan layer banjir, Anda dapat mengakses melalui tautan berikut:
+                
+                👉 [Layer Banjir](https://bit.ly/LayerBanjir)
+                
+                Jika ingin semua layer, maka dapat mengakses tautan berikut:
+                
+                👉 [All Layer inaRISK](https://gis.bnpb.go.id/server/rest/services/inarisk)
+                
+                4. Buka file **.kml** atau **.kmz** secara langsung di Google Earth Pro, maka layer akan otomatis muncul di peta.  
+                5. Buka file **.csv** hasil dari komputasi, lalu pilih delimiter yang sesuai (jika CSV biasa, pilih **comma** atau **koma (,)**).  
+                6. Masukkan kolom **Longitude** dan **Latitude** sesuai dengan nama kolom pada data masing-masing.  
+                7. Spesifikasikan tipe data pada setiap kolomnya. Biasanya Google akan otomatis mendeteksi, namun Anda tetap dapat mengeditnya jika ada kesalahan.
                 8. Layer dan titik data sudah dapat diakses di Google Earth Pro.
-            """, unsafe_allow_html=True)
+            """)
 
             # Step 8: Peta Interaktif dengan Pydeck
             if lon_col and lat_col and not final.empty:

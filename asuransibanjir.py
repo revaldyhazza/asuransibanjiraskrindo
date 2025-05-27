@@ -33,8 +33,8 @@ st.logo("assets/Logo Askrindo BUMN.png", icon_image="assets/Logo Askrindo BUMN.p
 st.title("🌊 Web Application Flood Insurance Askrindo")
 
 st.markdown("""
-    Untuk memahami Dashboard secara keseluruhan, silakan akses tautan berikut:<br>
-    <a href="https://bit.ly/AsuransiBanjir101" target="_blank">👉 Asuransi Banjir 101</a>
+    Untuk memahami Dashboard secara keseluruhan seperti mengunduh panduan dan data, silakan akses tautan berikut:<br>
+    <a href="https://bit.ly/AsuransiBanjir101" target="_blank" style="text-decoration: none;">👉 Asuransi Banjir 101</a>
 """, unsafe_allow_html=True)
 
 # Step 1: Upload CSV

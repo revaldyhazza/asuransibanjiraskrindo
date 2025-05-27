@@ -340,7 +340,7 @@ if csv_file:
 
             output_excel = io.BytesIO()
             with pd.ExcelWriter(output_excel, engine='xlsxwriter') as writer:
-                df.to_excel(writer, index=False, sheet_name='Data')
+                final.to_excel(writer, index=False, sheet_name='Data')
 
             # Kembalikan posisi ke awal agar bisa dibaca
             output_excel.seek(0)

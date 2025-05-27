@@ -32,7 +32,9 @@ st.set_page_config(page_title="Asuransi Banjir Askrindo", page_icon="assets/Logo
 st.logo("assets/Logo Askrindo BUMN.png", icon_image="assets/Logo Askrindo BUMN.png")
 st.title("🌊 Web Application Flood Insurance Askrindo")
 
-st.write("##### Untuk memahami Dashboard secara keseluruhan dapat mengakses link bit.ly/AsuransiBanjir101")
+st.markdown(""" Untuk memahami Dashboard secara keseluruhan dapat mengakses tautan berikut.
+                👉 [Asuransi Banjir 101](https://bit.ly/AsuransiBanjir101)
+            """)
 
 # Step 1: Upload CSV
 st.subheader("⬆️ Upload Data yang Diperlukan")

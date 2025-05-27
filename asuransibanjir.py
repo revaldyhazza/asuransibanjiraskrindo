@@ -32,8 +32,7 @@ st.set_page_config(page_title="Asuransi Banjir Askrindo", page_icon="assets/Logo
 st.logo("assets/Logo Askrindo BUMN.png", icon_image="assets/Logo Askrindo BUMN.png")
 st.title("🌊 Web Application Flood Insurance Askrindo")
 
-st.markdown(""" Untuk memahami Dashboard secara keseluruhan dapat mengakses tautan berikut.
-                
+st.markdown(""" Untuk memahami Dashboard secara keseluruhan dapat mengakses tautan berikut.<br>
                 👉 [Asuransi Banjir 101](https://bit.ly/AsuransiBanjir101)
             """)
 
